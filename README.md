@@ -1,8 +1,5 @@
-# React + Vite
+使用到React/vite/tailwind/Leaflet
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+設計目的來由是因為常常跟朋友家人們討論午餐/晚餐到底要吃甚麼都會討論很久，明明地圖上就很多收藏，卻還是不知道要吃甚麼，所以就建立這個專案來對應這個問題
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+(目前還在建置當中)
