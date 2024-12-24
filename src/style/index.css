@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: var(--color-background);
+}
+/* 新增顏色變數 */
+:root {
+  --color-primary: #ff7a59;
+  --color-secondary: #ffd966;
+  --color-background: #fffdf5;
+  --color-text: #2d2d2d;
+  --color-success: #4caf50;
+  --color-error: #f44336;
+}
+
+/////////
+/* Header 樣式 */
+.Header {
+  background-color: #ff7a59;
+  color: #fffdf5;
+  padding: 10px 20px;
+}
+
+//////////
+/* Footer 樣式 */
+.footer {
+  background-color: #2d2d2d;
+  color: #fffdf5;
+  padding: 20px 10px;
+  text-align: center;
+}
+
+.footer a {
+  color: #ffd966;
+  text-decoration: none;
+  margin: 0 5px;
+  transition: color 0.3s;
+}
+
+.footer a:hover {
+  color: #ff7a59;
+}
+//////////
+/* 按鈕 */
+.button-primary {
+  background-color: #ff7a59;
+  color: #fffdf5;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.button-primary:hover {
+  background-color: #e86a48;
+}
+
+.button-secondary {
+  background-color: #ffd966;
+  color: #2d2d2d;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.button-secondary:hover {
+  background-color: #ffc845;
+}
