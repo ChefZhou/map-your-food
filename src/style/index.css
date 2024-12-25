@@ -1,3 +1,7 @@
+@import "leaflet/dist/leaflet.css";
+@import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+@import "leaflet-control-geocoder/dist/Control.Geocoder.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,6 +9,7 @@
 body {
   background-color: var(--color-background);
 }
+
 /* 新增顏色變數 */
 :root {
   --color-primary: #ff7a59;

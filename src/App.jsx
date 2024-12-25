@@ -7,6 +7,7 @@ import StoreDetails from "./pages/StoreDetails.jsx";
 import PageNotFound from "./pages/PageNotFound.jsx";
 import AppLayout from "./components/AppLayout.jsx";
 import MapPage from "./pages/MapPage.jsx";
+import "leaflet-control-geocoder/dist/Control.Geocoder.css"; // 在JS檔案中引入
 
 function App() {
   return (

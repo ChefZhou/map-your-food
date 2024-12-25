@@ -1,65 +1,84 @@
-import { useEffect, useRef } from "react";
+import { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-import "leaflet-defaulticon-compatibility";
+import L from "leaflet";
+
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import MapSideBar from "./MapSideBar";
 import useLocation from "../hooks/useLocation";
 
-function Map() {
-  const { location, error } = useLocation();
-  const defaultLocation = [25.033, 121.5654];
-  const mapRef = useRef();
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
 
-  useEffect(() => {
-    if (mapRef.current && location.latitude && location.longitude) {
-      const userLocation = [location.latitude, location.longitude];
+const LocationMarker = ({ setMarkers }) => {
+  const { location, error, position } = useLocation(setMarkers);
+  const defaultPosition = [25.033964, 121.564468];
 
-      mapRef.current.flyTo(userLocation, 13, {
-        animate: true,
-        duration: 2,
-      });
-    } else if (error) {
-      mapRef.current.flyTo(defaultLocation, 13, {
-        animate: true,
-        duration: 2,
-      });
-    }
-  }, [location, error]);
+  if (error) {
+    console.error(error);
+    return (
+      <Marker position={defaultPosition}>
+        <Popup>預設位置</Popup>
+      </Marker>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="w-full max-w-4xl h-3/4">
-        <MapContainer
-          center={defaultLocation}
-          zoom={13}
-          style={{
-            position: "fixed",
-            top: "10%",
-            left: "35%",
-            height: "80vh",
-            width: "90vw",
-            margin: "0",
-          }}
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          <Marker
-            position={
-              location.latitude && location.longitude
-                ? [location.latitude, location.longitude]
-                : defaultLocation
-            }
+    <Marker
+      position={
+        location.latitude && location.longitude
+          ? [location.latitude, location.longitude]
+          : defaultPosition
+      }
+    >
+      <Popup>
+        {location.latitude && location.longitude ? "你的位置" : "預設位置"}
+      </Popup>
+    </Marker>
+  );
+};
+
+const Map = () => {
+  const [markers, setMarkers] = useState([]);
+  const updateMarker = (id, description) => {
+    setMarkers((prevMarkers) =>
+      prevMarkers.map((marker) =>
+        marker.id === id ? { ...marker, description } : marker
+      )
+    );
+  };
+
+  return (
+    <div>
+      <MapSideBar markers={markers} updateMarker={updateMarker} />
+      <div>
+        <div>
+          <MapContainer
+            center={[25.033964, 121.564468]} // 初始中心點為台北101
+            zoom={13}
+            className=" rounded-3xl h-[750px] w-[70%]   fixed top-[95px] right-5  "
           >
-            <Popup>
-              {error ? "這是預設位置 (台北101)。" : "這是您的位置。"}
-            </Popup>
-          </Marker>
-        </MapContainer>
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <LocationMarker setMarkers={setMarkers} />
+            {markers.map((marker) => (
+              <Marker key={marker.id} position={[marker.lat, marker.lng]}>
+                <Popup>{marker.description}</Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default Map;

@@ -6,7 +6,7 @@ function AppLayout() {
   return (
     <div>
       <Header />
-      <main>
+      <main className="flex-grow mt-16 mb-16 overflow-hidden">
         <Outlet />
       </main>
       <Footer />
