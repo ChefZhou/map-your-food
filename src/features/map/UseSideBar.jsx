@@ -1,8 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const UseSideBar = ({ markers = [], updateMarker }) => {
+const UseSideBar = ({
+  markers = [],
+  updateMarker,
+  newMarker,
+  deleteMarker,
+  distanceCalculator,
+}) => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    if (newMarker) {
+      setSelectedMarker(newMarker);
+      setDescription(newMarker.description);
+    }
+  }, [newMarker]);
 
   const handleSelectMarker = (marker) => {
     setSelectedMarker(marker);
@@ -12,6 +25,14 @@ const UseSideBar = ({ markers = [], updateMarker }) => {
   const handleUpdateMarker = () => {
     if (selectedMarker) {
       updateMarker(selectedMarker.id, description);
+      setSelectedMarker(null);
+      setDescription("");
+    }
+  };
+
+  const handleDeleteMarker = (id) => {
+    deleteMarker(id);
+    if (selectedMarker && selectedMarker.id === id) {
       setSelectedMarker(null);
       setDescription("");
     }
@@ -30,7 +51,11 @@ const UseSideBar = ({ markers = [], updateMarker }) => {
             className="cursor-pointer"
             onClick={() => handleSelectMarker(marker)}
           >
-            {marker.description}
+            {marker.description} - 距離:{" "}
+            {distanceCalculator(marker.position[0], marker.position[1]).toFixed(
+              2
+            )}{" "}
+            公里
           </li>
         ))}
       </ul>
@@ -43,12 +68,20 @@ const UseSideBar = ({ markers = [], updateMarker }) => {
             onChange={(e) => setDescription(e.target.value)}
             className="border p-2 w-full rounded-lg bg-gray-200"
           />
-          <button
-            onClick={handleUpdateMarker}
-            className="mt-2 p-2 bg-[#ffd966] text-[#2d2d2d] border-none py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-[#ffc845] text-white shadow"
-          >
-            更新
-          </button>
+          <div className="flex space-x-2 mt-2">
+            <button
+              onClick={handleUpdateMarker}
+              className="p-2 bg-[#ffd966] text-[#2d2d2d] border-none py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-[#ffc845] text-white shadow"
+            >
+              更新
+            </button>
+            <button
+              onClick={() => handleDeleteMarker(selectedMarker.id)}
+              className="p-2 bg-red-500 text-white border-none py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-red-400 shadow"
+            >
+              刪除
+            </button>
+          </div>
         </div>
       )}
     </>
