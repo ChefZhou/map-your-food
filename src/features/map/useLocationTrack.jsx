@@ -6,7 +6,7 @@ const useLocationTrack = () => {
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser");
+      setError("無法取得您的位置");
       return;
     }
 
@@ -16,8 +16,8 @@ const useLocationTrack = () => {
     };
 
     const error = () => {
-      setError("Unable to retrieve your location");
-      setCurrentPosition({ latitude: 25.033964, longitude: 121.564468 }); // 使用預設位置
+      setError("無法獲取您的位置");
+      setCurrentPosition({ latitude: 25.033964, longitude: 121.564468 }); //預設位置
     };
 
     const watchId = navigator.geolocation.watchPosition(success, error);

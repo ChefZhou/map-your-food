@@ -4,6 +4,8 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet-defaulticon-compatibility";
 import useLocationTrack from "../hooks/useLocationTrack";
+import MarkerItem from "./MarkerItem";
+import MapSideBar from "../features/map/MapSideBar";
 
 const MapComponent = () => {
   const { currentPosition, error } = useLocationTrack();
@@ -28,7 +30,7 @@ const MapComponent = () => {
     const toRad = (value) => (value * Math.PI) / 180;
     const R = 6371; // Radius of the Earth in kilometers
     const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
+    const dLon = toRad(lat2 - lon1);
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(toRad(lat1)) *
@@ -74,12 +76,19 @@ const MapComponent = () => {
       <aside className="w-1/4 p-4 bg-white shadow-lg">
         <h2 className="text-lg font-bold mb-4">標記列表</h2>
         {markers.map((marker, index) => (
-          <div key={index} className="mb-2">
-            <p>{`標記 ${index + 1}: 緯度 ${marker.lat}, 經度 ${marker.lng}`}</p>
-            <p>{`距離：${
-              distances[index] ? distances[index].toFixed(2) : "未知"
-            } 公里`}</p>
-          </div>
+          <MarkerItem
+            key={index}
+            marker={marker}
+            distanceCalculator={(lat, lng) =>
+              calculateDistance(
+                currentPositionArray[0],
+                currentPositionArray[1],
+                lat,
+                lng
+              )
+            }
+            handleSelectMarker={() => {}}
+          />
         ))}
       </aside>
     </div>

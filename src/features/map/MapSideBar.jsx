@@ -1,6 +1,7 @@
-import UseSideBar from "../features/map/UseSideBar";
-import MarkerItem from "./MarkerItem";
-import Button from "./Button";
+import UseSideBar from "./UseSideBar";
+import Button from "../../components/Button";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast"; // 確保引入 toast 組件
 
 const MapSideBar = ({
   markers = [],
@@ -25,8 +26,17 @@ const MapSideBar = ({
     distanceCalculator,
   });
 
-  // 添加日誌輸出來檢查 selectedMarker 狀態
-  console.log("selectedMarker:", selectedMarker);
+  const navigate = useNavigate();
+
+  const handleFateButtonClick = () => {
+    if (markers.length >= 2) {
+      toast.success("命運的指針指向了你的下一個目的地!");
+      navigate("/destination");
+    } else {
+      toast.error("現在想不到?那就休息一下再來吧");
+      navigate("/home");
+    }
+  };
 
   return (
     <div>
@@ -39,12 +49,18 @@ const MapSideBar = ({
         <p className="text-xl font-bold mb-4 text-center ">座標列表</p>
         <ul>
           {markers.map((marker) => (
-            <MarkerItem
+            <li
               key={marker.id}
-              marker={marker}
-              distanceCalculator={distanceCalculator}
-              handleSelectMarker={handleSelectMarker}
-            />
+              className="cursor-pointer"
+              onClick={() => handleSelectMarker(marker)}
+            >
+              {marker.description} - 距離:{" "}
+              {distanceCalculator(
+                marker.position[0],
+                marker.position[1]
+              ).toFixed(2)}{" "}
+              公里
+            </li>
           ))}
         </ul>
         {selectedMarker && (
@@ -63,15 +79,23 @@ const MapSideBar = ({
               >
                 更新
               </button>
-              <button
+              <Button
                 onClick={() => handleDeleteMarker(selectedMarker.id)}
-                className="p-2 bg-red-500 text-white border-none py-2 px-4 rounded-lg transition-colors duration-300 hover:bg-red-400 shadow"
+                className="bg-red-500 text-white hover:bg-red-400"
               >
                 刪除
-              </button>
+              </Button>
             </div>
           </div>
         )}
+        <div className="mt-4">
+          <Button
+            onClick={handleFateButtonClick}
+            className="bg-green-500 text-white hover:bg-green-400"
+          >
+            交給命運
+          </Button>
+        </div>
       </div>
     </div>
   );

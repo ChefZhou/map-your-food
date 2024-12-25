@@ -12,9 +12,10 @@ import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
-import MapSideBar from "./MapSideBar";
+import MapSideBar from "../features/map/MapSideBar";
 import useLocation from "../hooks/useLocation";
-import useLocationTrack from "../hooks/useLocationTrack.jsx";
+import useLocationTrack from "../features/map/useLocationTrack";
+import { calculateDistance } from "../utils/utils";
 
 const targetLatitude = 25.033964;
 const targetLongitude = 121.564468;
@@ -97,21 +98,6 @@ const Map = () => {
     setMarkers((prevMarkers) =>
       prevMarkers.filter((marker) => marker.id !== id)
     );
-  };
-
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const toRad = (value) => (value * Math.PI) / 180;
-    const R = 6371; // Radius of the Earth in kilometers
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(toRad(lat1)) *
-        Math.cos(toRad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Distance in kilometers
   };
 
   const mainPosition = currentPositionArray;
